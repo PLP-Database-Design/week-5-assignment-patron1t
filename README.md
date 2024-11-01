@@ -28,17 +28,50 @@ This demonstrates the cconnection of MySQL database and Node.js to create a simp
    
    // Question 1 goes here
 
+app.get('/patients', (req, res) => {
+  db.query('SELECT patient_id, first_name, last_name, date_of_birth FROM patients', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
 
    // Question 2 goes here
 
+app.get('/providers', (req, res) => {
+  db.query('SELECT first_name, last_name, provider_specialty FROM providers', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
 
    // Question 3 goes here
 
+app.get('/patients/first-name/:name', (req, res) => {
+  const firstName = req.params.name;
+  db.query('SELECT * FROM patients WHERE first_name = ?', [firstName], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
 
    // Question 4 goes here
 
+app.get('/providers/specialty/:specialty', (req, res) => {
+  const specialty = req.params.specialty;
+  db.query('SELECT * FROM providers WHERE provider_specialty = ?', [specialty], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
    
-
    // listen to the server
    const PORT = 3000
    app.listen(PORT, () => {
